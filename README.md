@@ -31,7 +31,6 @@
 - `todos`：任務  
 - `todo_items`：子任務  
 - `messages`：留言  
-<br/>
 
 ### 使用技術
 - Java Spring Boot
@@ -65,22 +64,144 @@
    ./mvnw spring-boot:run
    #預設服務位置：http://localhost:8080
    ```
-4. 資料庫建立預設帳號與角色，請手動在資料庫執行以下 SQL：
+   
+4. 資料庫建立預設Admin帳號與角色，請手動在資料庫執行以下 SQL：
    ```bash
    USE todo_db;
    
    INSERT INTO roles (name)
    VALUES ('ROLE_ADMIN'), ('ROLE_USER');
    
-   -- 管理員（password 請放 BCrypt 雜湊）
+   -- 預先建立Admin權限資料
    INSERT INTO users (username, email, password)
-   VALUES ('admin', 'admin@example.com', '$2a$10$yourBCryptHashHere');
+   VALUES ('admin', 'admin@example.com', '$2a$10$d26pt/jjWFnSlLQkWCNWFuwbZf0A97Pg6ZGbw8ZejYoEx3V1dPWay');
    
    -- 指派管理員角色（請依實際 ID 調整）
    INSERT INTO users_roles (user_id, role_id)
    VALUES (1, 1);
    ```
-5. API文件
+   
+5. 測試 API (Postman Collection)
+  - 匯入本專案提供的 [Postman Collection](docs/todo-api.postman_collection.json)  
+   - 確保已完成步驟 4（資料庫建立預設 Admin 帳號與角色）  
+   - 開啟 Postman，在測試請求時：
+     - 於 **Authorization** 標籤頁 → **Auth Type** 選擇 **Basic Auth**
+     - 輸入帳號與密碼：
+       - 帳號：`admin`  
+       - 密碼：`admin`  
+- 範例測試流程（Admin權限可執行所有Api）：  
+     1. 建立新的任務（Admin專有權限）  
+        **Request**  
+        `POST /api/todos`  
+
+        **Body (JSON)**  
+        ```json
+        {
+          "title": "learn vite2",
+          "description": "learning",
+          "dueDate": "2025-09-15"
+        }
+        ```
+        
+     2. 為任務加入子任務（Admin專有權限 ）
+        **Request**  
+        `POST api/todos/{id}/items`
+        
+     3. 編輯任務（Admin專有權限 ） 
+        **Request**  
+        `PUT /api/todos/{id}`  
+
+        **Body (JSON)**  
+        ```json
+        {
+          "title": "learn vite2",
+          "description": "learning",
+          "dueDate": "2025-08-31"
+        }
+        ```
+        
+     4. 完成子任務  
+        **Request**  
+        `GET api/todos/{id}/items/{id}/complete`
+        
+     5. 查詢任務參與者（Admin專有權限 ）  
+        **Request**  
+        `GET api/todos/{id}/participation`
+        
+     6. 查詢任務進度（Admin專有權限 ）  
+        **Request**  
+        `GET api/todos/{id}/items/summary`
+        
+     7. 完成任務  
+        **Request**
+        api/todos/{id}/complete
+
+     8. 取消完成任務  
+        **Request**
+        api/todos/{id}/incomplete
+  
+     9. 審核任務（Admin專有權限，任務需要先被完成，才能執行此Api）  
+        **Request**  
+        `POST /api/todos/{id}/review`
+        
+        **Body (JSON)**  
+        ```json
+        {
+          "title": "learn vite2",
+          "description": "learning",
+          "dueDate": "2025-08-31"
+        }
+        ```
+  
+    10. 留言  
+        **Request**  
+        `POST /api/todos/{id}/review`
+        
+        **Body (JSON)**  
+        ```json
+        {
+          "title": "learn vite2",
+          "description": "learning",
+          "dueDate": "2025-08-31"
+        }
+        ```
+    11. 查詢排行榜  
+        **Request**  
+        `POST /api/todos/{id}/review`
+        
+        **Body (JSON)**  
+        ```json
+        {
+          "title": "learn vite2",
+          "description": "learning",
+          "dueDate": "2025-08-31"
+        }
+        ```
+        
+ - 其他API測試（一般User權限）
+     1. 首先註冊帳號，便可使用帳號和密碼發送Api請求，於**Authorization** 標籤頁 → **Auth Type** 選擇 **Basic Auth**輸入帳號密碼
+        **Request**  
+        `POST /api/auth/register`  
+
+        **Body (JSON)**  
+        ```json
+        {
+          "username": "user1",
+          "email": "user1@example.com",
+          "password": "password1",
+          "firstName":"user",
+          "lastName":"user"
+        }
+        ```
+     2. 通過驗證後便可以一般User權限皆可測試Admin專有權限以外之Api
+        **完成任務、未完成任務、參與任務、留言**  
+        `POST /api/todos`
+        **未完成任務**  
+        `POST /api/todos`
+        **未完成任務**  
+        `POST /api/todos`
+
+
    
 
 
