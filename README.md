@@ -12,6 +12,10 @@
 - 排行榜 API：提供協作參與次數與任務完成數資料查詢。
 
 # 系統架構
+### 系統架構圖
+下圖為系統功能架構圖，將前述五大模組與其細部功能以總覽方式呈現：
+<br/>
+
 ### 程式分層設計
 後端採用 **分層架構設計**，依職責將程式劃分Controller、Service、Repository 與 Model，各層責任如下：
 - **Controller 層**：接收API請求，回傳 JSON 回應（例如：`AuthController`, `TodoController`）  
@@ -37,7 +41,7 @@
 
 1. 建立資料庫
    ```bash
-   CREATE DATABASE ecom_db;
+   CREATE DATABASE todo_db;
    ```
 2. 取得原始碼
    ```bash
@@ -90,6 +94,7 @@
    - User帳號
      - 帳號：
      - 密碼：
+       
 7. 測試 API (Postman Collection)
   - 匯入本專案提供的 [Postman Collection](docs/todo-api.postman_collection.json)
   - 匯入本專案提供的 [Postman Environment](docs/local_env.json)
