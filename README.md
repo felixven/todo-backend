@@ -35,13 +35,17 @@
 
 ## 本機安裝與使用
 
-1. 取得原始碼
+1. 建立資料庫
+   ```bash
+   CREATE DATABASE ecom_db;
+   ```
+2. 取得原始碼
    ```bash
    git clone https://github.com/felixven/todo-backend.git
    cd todo-backend
    ```
    
-2. 設定資料庫與環境  
+3. 設定資料庫與環境  
    編輯 `src/main/resources/application.properties`，填入以下內容：
 
    ```properties
@@ -56,13 +60,13 @@
    jwt.secret=your-secret-key
    ```
    
-3. 啟動後端服務
+4. 啟動後端服務
    ```bash
    ./mvnw spring-boot:run
    #預設服務位置：http://localhost:8080
    ```
    
-4. 資料庫建立預設Admin帳號與角色，請手動在資料庫執行以下 SQL：
+5. 資料庫建立預設Admin帳號與角色，請手動在資料庫執行以下 SQL：
    ```bash
    USE todo_db;
    
@@ -78,7 +82,15 @@
    VALUES (1, 1);
    ```
    
-5. 測試 API (Postman Collection)
+6. 預設帳號
+   專案啟動後會自動建立預設帳號，可直接登入測試，亦可透過註冊 API 建立新帳號：
+   - Admin帳號
+     - 帳號：
+     - 密碼：
+   - User帳號
+     - 帳號：
+     - 密碼：
+7. 測試 API (Postman Collection)
   - 匯入本專案提供的 [Postman Collection](docs/todo-api.postman_collection.json)
   - 匯入本專案提供的 [Postman Environment](docs/local_env.json)
   - 開啟 Postman，選擇 `local_env` 環境，點選 **Run Collection**
