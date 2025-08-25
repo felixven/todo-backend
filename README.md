@@ -7,17 +7,14 @@
 - 本檔案為 **後端原始碼**，前端原始碼請見：(link)
 
 # 功能介紹
-- 使用者管理：註冊 / 登入 / JWT Token 驗證，支援角色分流（Admin / User
-- 任務 CRUD API：建立、更新、刪除、查詢任務，支援截止日期與逾期判斷
-- 待審核流程：任務完成後需由管理者審核，API 記錄完成者與審核者資訊
-- 儀表板統計 API：回傳任務數據（總數、完成、未完成、待審核、逾期）
-- 排行榜 API：提供協作參與次數與任務完成數，支援查詢使用者明細
-- 表單驗證與錯誤處理：帳號、Email、密碼規則檢查，重複註冊防護，統一錯誤訊息回傳
+- 使用者管理：註冊 / 登入 / JWT Token 驗證，支援角色權限分流。
+- 任務管理：任務建立、更新、刪除、查詢，子任務建立、更新、刪除、查詢，任務參與、完成、審核
+- 排行榜 API：提供協作參與次數與任務完成數資料查詢。
 
 # 系統架構
 ### 程式分層設計
 後端採用 **分層架構設計**，依職責將程式劃分Controller、Service、Repository 與 Model，各層責任如下：
-- **Controller 層**：接收Api請求，回傳 JSON 回應（例如：`AuthController`, `TodoController`）  
+- **Controller 層**：接收API請求，回傳 JSON 回應（例如：`AuthController`, `TodoController`）  
 - **Service 層**：處理業務邏輯（例如：`AuthService`, `TodoService`）  
 - **Repository 層**：透過 Spring Data JPA 與 MySQL 互動（例如：`UserRepository`, `TodoRepository`）  
 - **Model 層**：資料表對應的實體類別（例如：`User`, `Role`, `Todo`）
@@ -40,7 +37,7 @@
 
 1. 取得原始碼
    ```bash
-   git clone https://github.com/yourname/todo-backend.git
+   git clone https://github.com/felixven/todo-backend.git
    cd todo-backend
    ```
    
@@ -82,13 +79,10 @@
    ```
    
 5. 測試 API (Postman Collection)
-  - 匯入本專案提供的 [Postman Collection](docs/todo-api.postman_collection.json)  
-   - 確保已完成步驟 4（資料庫建立預設 Admin 帳號與角色）  
-   - 開啟 Postman，在測試請求時：
-     - 於 **Authorization** 標籤頁 → **Auth Type** 選擇 **Basic Auth**
-     - 輸入帳號與密碼：
-       - 帳號：`admin`  
-       - 密碼：`admin`  
+  - 匯入本專案提供的 [Postman Collection](docs/todo-api.postman_collection.json)
+  - 匯入本專案提供的 [Postman Environment](docs/local_env.json)
+  - 開啟 Postman，選擇 `local_env` 環境，點選 **Run Collection**
+    
 - 範例測試流程（Admin權限可執行所有Api）：  
      1. 建立新的任務（Admin專有權限）  
         **Request**  
