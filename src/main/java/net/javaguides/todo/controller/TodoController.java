@@ -1,8 +1,8 @@
 package net.javaguides.todo.controller;
 
 import lombok.AllArgsConstructor;
+import net.javaguides.todo.dto.ParticipationDetailResponse;
 import net.javaguides.todo.dto.TodoDto;
-import net.javaguides.todo.entity.Todo;
 import net.javaguides.todo.service.TodoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.time.LocalDate;
-import java.util.HashMap;
 
 @CrossOrigin("*")
 @RestController
@@ -112,6 +110,18 @@ public class TodoController {
     @GetMapping("/overdue")
     public ResponseEntity<List<TodoDto>> getOverdueTodos() {
         return ResponseEntity.ok(todoService.getOverdueTodos());
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    @GetMapping("{id}/participation")
+    public ResponseEntity<Map<String, Long>> getParticipation(@PathVariable("id") Long todoId) {
+        return ResponseEntity.ok(todoService.getParticipationStats(todoId));
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    @GetMapping("{id}/participation-detail")
+    public ResponseEntity<ParticipationDetailResponse> getParticipationDetail(@PathVariable("id") Long todoId) {
+        return ResponseEntity.ok(todoService.getParticipationDetail(todoId));
     }
 
 }

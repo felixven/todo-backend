@@ -15,6 +15,7 @@ import net.javaguides.todo.utils.SecurityUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -67,12 +68,36 @@ public class TodoItemServiceImpl implements TodoItemService {
             throw new TodoAPIException(HttpStatus.BAD_REQUEST, "Reviewed task cannot be modified.");
         }
 
+        // 建立細項（預設 completed=false；@PrePersist 會帶 createdAt）
         TodoItem it = new TodoItem();
         it.setTodo(todo);
         it.setTitle(title.trim());
         TodoItem saved = todoItemRepository.save(it);
+
+        // ✅ 若父任務原本是「已完成」，新增細項代表工作又被展開 → 自動 Reopen
+        if (todo.isCompleted()) {
+            // 中文註解：新增了新的細項，代表又有未完成內容，需清空完成者與審核資訊
+            todo.setCompleted(false);
+            todo.setCompletedByUser(null);
+            todo.setCompletedAt(null);
+
+            todo.setReviewed(false);
+            todo.setReviewedBy(null);
+            todo.setReviewedAt(null);
+
+            // 逾期重算：未完成且截止日在今天之前 → 逾期
+            if (todo.getDueDate() != null) {
+                todo.setOverdue(todo.getDueDate().isBefore(LocalDate.now()));
+            } else {
+                todo.setOverdue(false);
+            }
+
+            todoRepository.save(todo);
+        }
+
         return toDto(saved);
     }
+
 
     @Override
     public void deleteItem(Long todoId, Long itemId) {
@@ -150,9 +175,9 @@ public class TodoItemServiceImpl implements TodoItemService {
         String byName = null;
         if (it.getCompletedBy() != null) {
             User u = it.getCompletedBy();
-            String full = ((u.getLastName() != null ? u.getLastName() : "") +
-                    (u.getFirstName() != null ? u.getFirstName() : "")).trim();
-            byName = full.isEmpty() ? u.getUsername() : full;
+            byName = (u.getFirstName() != null && !u.getFirstName().isEmpty())
+                    ? u.getFirstName()
+                    : u.getUsername();  // fallback
         }
 
         TodoItemDto dto = new TodoItemDto();

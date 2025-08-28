@@ -1,7 +1,7 @@
 package net.javaguides.todo.service;
 
+import net.javaguides.todo.dto.ParticipationDetailResponse;
 import net.javaguides.todo.dto.TodoDto;
-import net.javaguides.todo.entity.Todo;
 
 import java.util.List;
 import java.util.Map;
@@ -20,4 +20,6 @@ public interface TodoService {
     List<TodoDto> getReviewedTodos();
     Map<String, Long> getTodoStatistics();
     List<TodoDto> getOverdueTodos();
+    Map<String, Long> getParticipationStats(Long todoId);
+    ParticipationDetailResponse getParticipationDetail(Long todoId);
 }

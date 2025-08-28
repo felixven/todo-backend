@@ -1,5 +1,6 @@
 package net.javaguides.todo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +10,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Setter
 @Getter
@@ -40,8 +43,9 @@ public class Todo {
     @Column(nullable = false)
     private boolean reviewed = false;
 
-    @Column
-    private String completedBy;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "completed_by_user_id")
+    private User completedByUser;
 
     @Column
     private LocalDateTime completedAt;
@@ -54,5 +58,14 @@ public class Todo {
 
     @Column(nullable = false)
     private boolean isOverdue = false;
+
+    @OneToMany(mappedBy="todo", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    @JsonIgnore // 防止序列化遞迴，若你用 REST 回傳 Entity
+    private List<TodoItem> items = new ArrayList<>();
+
+    @OneToMany(mappedBy="todo", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    @JsonIgnore
+    private List<Message> messages = new ArrayList<>();
+
 
 }

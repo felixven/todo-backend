@@ -20,7 +20,8 @@ public class TodoDto {
     private String description;
     private boolean completed;
     private boolean reviewed;
-    private String completedBy;
+    private Long completedById;
+    private String completedByName;
     private LocalDateTime completedAt;
     private String reviewedBy;
     private LocalDateTime reviewedAt;

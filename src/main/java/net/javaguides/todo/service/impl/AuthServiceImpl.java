@@ -17,7 +17,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -112,7 +111,7 @@ public class AuthServiceImpl implements AuthService {
         // ✅ 完整保留你原本的使用者資料設定
         if (userOptional.isPresent()) {
             User loggedInUser = userOptional.get();
-
+            jwtAuthResponse.setUserId(loggedInUser.getId());
             jwtAuthResponse.setFirstName(loggedInUser.getFirstName());
             jwtAuthResponse.setLastName(loggedInUser.getLastName());
 
