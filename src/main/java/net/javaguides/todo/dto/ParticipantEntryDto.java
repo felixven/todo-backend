@@ -11,8 +11,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ParticipantEntryDto {
-    private String username;   // 顯示用名稱（沿用你目前習慣）
-    private long count;        // 完成細項數
-    private double percentage; // 0~100（四捨五入兩位）
+    private String username;
+    private long count;
+    private double percentage;
 }
 

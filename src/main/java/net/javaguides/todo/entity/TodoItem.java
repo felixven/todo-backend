@@ -31,15 +31,12 @@ public class TodoItem {
     @Column(nullable = false)
     private boolean completed = false;
 
-    /** 完成者（可為 null；完成時記錄誰完成） */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "completed_by")   // 對應 users.id
+    @JoinColumn(name = "completed_by")
     private User completedBy;
 
-    /** 完成時間（可為 null） */
     private LocalDateTime completedAt;
 
-    /** 建立時間（自動帶） */
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 

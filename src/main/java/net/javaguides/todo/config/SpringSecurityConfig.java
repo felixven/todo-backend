@@ -68,22 +68,6 @@ public class SpringSecurityConfig {
         return configuration.getAuthenticationManager();
     }
 
-//    @Bean//spring container to manage the object of this class
-//    public UserDetailsService userDetailsService() {
-//        UserDetails ven = User.builder()
-//                .username("ven")
-//                .password(passwordEncoder().encode("password"))
-//                .roles("USER")
-//                .build();
-//
-//        UserDetails admin = User.builder()
-//                .username("admin")
-//                .password(passwordEncoder().encode("admin"))
-//                .roles("ADMIN")
-//                .build();
-//
-//        return new InMemoryUserDetailsManager(ven, admin);
-//    }
 
 
     @Bean
@@ -91,7 +75,6 @@ public class SpringSecurityConfig {
                                       UserRepository userRepository,
                                       PasswordEncoder encoder) {
         return args -> {
-            // 1. 確保角色存在
             Role adminRole = roleRepository.findByName("ROLE_ADMIN");
             if (adminRole == null) {
                 adminRole = roleRepository.save(new Role(null, "ROLE_ADMIN"));
@@ -102,23 +85,15 @@ public class SpringSecurityConfig {
                 userRole = roleRepository.save(new Role(null, "ROLE_USER"));
             }
 
-            // 2. 確保 admin 存在
             if (!userRepository.existsByUsername("admin")) {
                 User admin = new User(null, "Admin", "Admin", "admin",
                         "admin@example.com", encoder.encode("admin1234"), new HashSet<>());
                 userRepository.save(admin);
-
-                // 3. 存完 user 再加角色，這樣 roles 的 persist 就不會干擾
                 admin.getRoles().add(adminRole);
                 userRepository.save(admin);
             }
         };
     }
-
-
-
-
-
 }
 
 

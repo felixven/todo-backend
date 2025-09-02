@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ParticipationDetailResponse {
     private Long todoId;
-    private boolean eligibleForCollabBoard; // 參與者數 >= 2
+    private boolean eligibleForCollabBoard;
     private long totalCompletedItems;
     private boolean currentUserIsParticipant;
     private List<ParticipantEntryDto> participants;

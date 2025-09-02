@@ -60,7 +60,7 @@ public class Todo {
     private boolean isOverdue = false;
 
     @OneToMany(mappedBy="todo", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
-    @JsonIgnore // 防止序列化遞迴，若你用 REST 回傳 Entity
+    @JsonIgnore
     private List<TodoItem> items = new ArrayList<>();
 
     @OneToMany(mappedBy="todo", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)

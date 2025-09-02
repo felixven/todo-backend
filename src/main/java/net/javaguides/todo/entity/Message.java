@@ -18,7 +18,7 @@ public class Message {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;   // 和 Todo 一樣用 id 命名，保持一致
+    private Long id;
 
     @NotBlank
     @Size(min = 1, max = 2000, message = "內容需 1~2000 字")
@@ -29,12 +29,10 @@ public class Message {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    // 發在哪個任務底下
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "todo_id")   // 外鍵欄位名，與 Address 一樣的寫法
+    @JoinColumn(name = "todo_id")
     private Todo todo;
 
-    // 誰發的留言
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -42,7 +40,7 @@ public class Message {
     @PrePersist
     public void prePersist() {
         if (createdAt == null) {
-            createdAt = LocalDateTime.now();  // 和你現有欄位風格一致用 LocalDateTime
+            createdAt = LocalDateTime.now();
         }
     }
 }

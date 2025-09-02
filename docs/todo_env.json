@@ -1,0 +1,87 @@
+{
+	"id": "86657cb7-60a1-47ad-97e6-b5389ef2d121",
+	"name": "Todo API Environment Variables",
+	"values": [
+		{
+			"key": "todoId",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "firstItemId",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "secondItemId",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "firstMessageId",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "secondMessageId",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "adminId",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "user1Id",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "admin_bearer_token",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "user_bearer_token",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "categoryId",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "categoryId2",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "thirdItemId",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "user2Id",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2025-08-28T12:24:44.680Z",
+	"_postman_exported_using": "Postman/11.60.2"
+}

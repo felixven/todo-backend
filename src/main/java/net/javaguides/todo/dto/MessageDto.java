@@ -14,8 +14,8 @@ public class MessageDto {
     private Long id;
     private Long todoId;
     private Long userId;
-    private String username;      // 方便前端判斷是否本人
-    private String authorFullName;// firstName + lastName（找不到就用 username）
+    private String username;
+    private String authorFullName;
     private String content;
     private LocalDateTime createdAt;
 }

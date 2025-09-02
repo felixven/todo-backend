@@ -7,7 +7,6 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-/** 協作榜明細：某使用者在符合條件任務中完成過的細項清單 */
 @Getter
 @Setter
 @NoArgsConstructor

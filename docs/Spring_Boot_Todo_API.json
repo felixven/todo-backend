@@ -1,0 +1,1454 @@
+{
+	"info": {
+		"_postman_id": "21eca9c3-400b-4150-b45e-91575d9bc5cd",
+		"name": "Spring Boot Todo API",
+		"description": "# Todo Managament System API Collection\n\n##### 本 Collection 提供任務管理系統（Todo Management System）後端 API 測試，主要有以下功能模組：\n\n- **Authentication**：會員註冊、登入、登出\n    \n- **Todo**：任務（Todo）建立、修改、查詢、刪除\n    \n- **LeaderBoard**：排行榜查詢\n    \n- **Delete**：刪除功能",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40235919"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Admin Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"let userId = jsonData.userId;",
+									"pm.environment.set(\"adminId\", jsonData.userId);",
+									"",
+									"pm.test(`Admin (User Id: ${userId}) 登入成功`, function () {",
+									"  pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"usernameOrEmail\":\"admin\",\n   \"password\":\"admin1234\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "#### Admin權限使用者登入。"
+					},
+					"response": []
+				},
+				{
+					"name": "User Register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let body;",
+									"try {",
+									"    body = pm.response.json();",
+									"} catch (e) {",
+									"    body = pm.response.text();",
+									"}",
+									"",
+									"pm.test(\"註冊訊息正確，Uer帳號註冊成功\", function () {",
+									"    pm.expect(body).to.include(\"User Registered Successfully!\");",
+									"});",
+									"",
+									"pm.test(`回應訊息為: ${body}`, function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"user\",\n  \"email\": \"user@example.com\",\n  \"password\": \"user1234\",\n  \"firstName\": \"User\",\n  \"lastName\": \"User\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						},
+						"description": "#### 一般User註冊帳號。"
+					},
+					"response": []
+				},
+				{
+					"name": "User Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"let userId = jsonData.userId;",
+									"pm.environment.set(\"user1Id\", jsonData.userId);",
+									"",
+									"pm.test(`User (User Id: ${userId}) 登入成功`, function () {",
+									"  pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"usernameOrEmail\":\"user\",\n   \"password\":\"user1234\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "#### 一般User使用帳號密碼登入系統。"
+					},
+					"response": []
+				}
+			],
+			"description": "#### 本資料夾提供使用者註冊、登入之API測試"
+		},
+		{
+			"name": "Todo",
+			"item": [
+				{
+					"name": "Create Todo(Admin)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"let todoId = jsonData.id;",
+									"pm.environment.set(\"todoId\", jsonData.id);",
+									"",
+									"pm.test(`Todo (id:${todoId}) 建立成功`, function () {",
+									"  pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin1234",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"修正登入頁錯誤提示\",\n  \"description\": \"當使用者輸入錯誤帳號或密碼時，需正確顯示「帳號或密碼錯誤」訊息。\",\n  \"dueDate\": \"2025-09-30\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/todos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"todos"
+							]
+						},
+						"description": "#### Admin權限建立新的任務。"
+					},
+					"response": []
+				},
+				{
+					"name": "Add Todo Item 1 By Todo Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"let todoId = pm.environment.get(\"todoId\");",
+									"let itemId=jsonData.id;",
+									"pm.environment.set(\"firstItemId\", jsonData.id);",
+									"",
+									"pm.test(`Todo ${todoId} 中的子任務 (id: ${itemId}) 建立成功`, function () {",
+									"  pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin1234",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\":\"檢查後端登入 API 回傳的錯誤訊息格式\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/todos/{{todoId}}/items",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"todos",
+								"{{todoId}}",
+								"items"
+							]
+						},
+						"description": "#### Admin權限在指定任務中加入子任務（todo item）。"
+					},
+					"response": []
+				},
+				{
+					"name": "Add Todo Item 2 By Todo Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"let todoId = pm.environment.get(\"todoId\");",
+									"let itemId=jsonData.id;",
+									"pm.environment.set(\"secondItemId\", jsonData.id);",
+									"",
+									"pm.test(`Todo ${todoId} 中的子任務 (id: ${itemId}) 建立成功`, function () {",
+									"  pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin1234",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\":\"前端登入頁整合錯誤提示文字\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/todos/{{todoId}}/items",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"todos",
+								"{{todoId}}",
+								"items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Todo Item 2 By Todo Id Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"let todoId = pm.environment.get(\"todoId\");",
+									"let itemId=jsonData.id;",
+									"pm.environment.set(\"thirdItemId\", jsonData.id);",
+									"",
+									"pm.test(`Todo ${todoId} 中的子任務 (id: ${itemId}) 建立成功`, function () {",
+									"  pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin1234",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\":\"test3\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/todos/{{todoId}}/items",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"todos",
+								"{{todoId}}",
+								"items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Todo Item By Todo Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"let itemCount = jsonData.length;",
+									"let todoId = pm.environment.get(\"todoId\");",
+									"",
+									"pm.test(`查詢成功，在Todo (id: ${todoId}) 中有${itemCount} 項子任務`, function () {",
+									"  pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin1234",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/todos/{{todoId}}/items",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"todos",
+								"{{todoId}}",
+								"items"
+							]
+						},
+						"description": "#### 查詢指定任務之子任務。"
+					},
+					"response": []
+				},
+				{
+					"name": "Complete First Todo Item",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let todoId = pm.environment.get(\"todoId\");",
+									"let firstItemId = pm.environment.get(\"firstItemId\");",
+									"let jsonData = pm.response.json();",
+									"",
+									"pm.test(`Todo ${todoId} 中的子任務 (id: ${firstItemId})已被完成`, function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"",
+									"    pm.expect(jsonData.completed).to.eql(true);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "user",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "user1234",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/todos/{{todoId}}/items/{{firstItemId}}/complete",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"todos",
+								"{{todoId}}",
+								"items",
+								"{{firstItemId}}",
+								"complete"
+							]
+						},
+						"description": "#### 完成指定任務中其中一項子任務。"
+					},
+					"response": []
+				},
+				{
+					"name": "Complete Second Todo Item",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let todoId = pm.environment.get(\"todoId\");",
+									"let secondItemId = pm.environment.get(\"secondItemId\");",
+									"let jsonData = pm.response.json();",
+									"",
+									"pm.test(`Todo ${todoId} 中的 item (id: ${secondItemId}) 已被完成`, function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"",
+									"    pm.expect(jsonData.completed).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin1234",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/todos/{{todoId}}/items/{{secondItemId}}/complete",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"todos",
+								"{{todoId}}",
+								"items",
+								"{{secondItemId}}",
+								"complete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Complete Second Todo Item Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let todoId = pm.environment.get(\"todoId\");",
+									"let thirdItemId = pm.environment.get(\"thirdItemId\");",
+									"let jsonData = pm.response.json();",
+									"",
+									"pm.test(`Todo ${todoId} 中的 item (id: ${thirdItemId}) 已被完成`, function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"",
+									"    pm.expect(jsonData.completed).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "user",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "user1234",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/todos/{{todoId}}/items/{{thirdItemId}}/complete",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"todos",
+								"{{todoId}}",
+								"items",
+								"{{thirdItemId}}",
+								"complete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Todo Item Summary",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let todoId = pm.environment.get(\"todoId\");",
+									"",
+									"let jsonData = pm.response.json();",
+									"let total = jsonData.total;",
+									"let completed = jsonData.completed;",
+									"let progressPercent = Math.round(jsonData.progress * 100);",
+									"",
+									"pm.test(`Todo ${todoId} 的完成進度查詢成功，共有 ${total} 項子任務，已完成 ${completed} 項，進度為 ${progressPercent}%`, function () {",
+									"  pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin1234",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/todos/{{todoId}}/items/summary",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"todos",
+								"{{todoId}}",
+								"items",
+								"summary"
+							]
+						},
+						"description": "#### 查詢指定任務中子任務的完成進度（共幾項子任務、完成數、整體進度）。"
+					},
+					"response": []
+				},
+				{
+					"name": "Post Messgae 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"let todoId = pm.environment.get(\"todoId\");",
+									"pm.environment.set(\"firstMessageId\", jsonData.id);",
+									"",
+									"pm.test(`已在 Todo ${todoId} 留下第一則留言`, function () {",
+									"  pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin1234",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"content\":\"這個 bug 請優先處理，避免影響測試帳號的登入體驗。\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/todos/{{todoId}}/messages",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"todos",
+								"{{todoId}}",
+								"messages"
+							]
+						},
+						"description": "#### 登入中的使用者在任務中進行留言討論。"
+					},
+					"response": []
+				},
+				{
+					"name": "Post Message 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"let todoId = pm.environment.get(\"todoId\");",
+									"pm.environment.set(\"secondMessageId\", jsonData.id);",
+									"",
+									"pm.test(`已在 Todo ${todoId} 留下第二則留言`, function () {",
+									"  pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "user",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "user1234",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"content\":\"我我這邊實測，輸入錯誤密碼時沒有任何提示，畫面只是閃了一下。\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/todos/{{todoId}}/messages",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"todos",
+								"{{todoId}}",
+								"messages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Complete Todo By Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let todoId = pm.environment.get(\"todoId\");",
+									"let jsonData = pm.response.json();",
+									"let completedById=jsonData.completedById;",
+									"let completedByName=jsonData.completedByName;",
+									"",
+									"pm.test(`已把Todo ${todoId}完成，完成者：${completedByName} (id: ${completedById})`, function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"    pm.expect(jsonData.completed).to.eql(true);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "user1234",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "user",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/todos/{{todoId}}/complete",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"todos",
+								"{{todoId}}",
+								"complete"
+							]
+						},
+						"description": "#### 曾參與子任務的使用者可修改所屬任務的狀態（完成任務）。"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Todo Participation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let todoId = pm.environment.get(\"todoId\");",
+									"",
+									"let jsonData = pm.response.json();",
+									"let participantCount = 0; ",
+									"let totalCompleted = 0; ",
+									"",
+									"for (let key in jsonData) {",
+									"    if (jsonData.hasOwnProperty(key)) {",
+									"        participantCount += 1;  ",
+									"        totalCompleted += jsonData[key];",
+									"    }",
+									"}",
+									"",
+									"pm.test(`Todo ${todoId} 的參與度查詢成功，共有 ${participantCount} 人參與，完成了 ${totalCompleted} 項子任務`, function (){",
+									"  pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin1234",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/todos/{{todoId}}/participation",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"todos",
+								"{{todoId}}",
+								"participation"
+							]
+						},
+						"description": "#### 查詢特定任務中，各使用者的參與程度。"
+					},
+					"response": []
+				},
+				{
+					"name": "Review Todo(Admin)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let todoId = pm.environment.get(\"todoId\");",
+									"",
+									"let jsonData = pm.response.json();",
+									"let reviewer=jsonData.reviewedBy;",
+									"",
+									"pm.test(`Todo ${todoId} 審核成功，審核者：${reviewer}`, function () {",
+									"  pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin1234",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/todos/{{todoId}}/review",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"todos",
+								"{{todoId}}",
+								"review"
+							]
+						},
+						"description": "#### Admin審核已被完成的任務，任務審核狀態會被修改為已審核，並記錄審核時間。"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Todo By Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let todoId = pm.environment.get(\"todoId\");",
+									"let jsonData = pm.response.json();",
+									"let completed=jsonData.completed;",
+									"let reviewed=jsonData.reviewed;",
+									"",
+									"pm.test(`Todo ${todoId} 的狀態查詢成功，完成：${completed}，審核：${reviewed}`, function () {",
+									"  pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin1234",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/todos/{{todoId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"todos",
+								"{{todoId}}"
+							]
+						},
+						"description": "#### 查詢指定任務，會回傳任務基本資料、完成狀態、審核進度等資料。"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Todos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData = pm.response.json();",
+									"let todoCount = jsonData.length;",
+									"pm.test(`已列出所有Todo資料，共有${todoCount}個Todo`, function () {",
+									"  pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin1234",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/todos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"todos"
+							]
+						},
+						"description": "#### 查詢資料庫中所有的任務，response body會回傳任務基本資料、是否完成、是否審核等狀體。"
+					},
+					"response": []
+				}
+			],
+			"description": "#### 本資料夾提供Todo（任務）建立、修改、查詢、參與、完成、狀態查詢，子任務加入、查詢、刪除之API測試。"
+		},
+		{
+			"name": "LeaderBoard",
+			"item": [
+				{
+					"name": "All Collab User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"協作榜單查詢成功\", function () {",
+									"  pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin1234",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/todos/leaderboard/collab",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"todos",
+								"leaderboard",
+								"collab"
+							]
+						},
+						"description": "#### 查詢所有曾參與任務的使用者。\n"
+					},
+					"response": []
+				},
+				{
+					"name": "Collab User By UserId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let user1Id=pm.environment.get(\"user1Id\");",
+									"let jsonData = pm.response.json();",
+									"let itemCount = jsonData.length;",
+									"",
+									"pm.test(`User ID:${user1Id} 的參與度查詢成功，總共參與了${itemCount}次`, function () {",
+									"  pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin1234",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/todos/leaderboard/collab/{{user1Id}}/items",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"todos",
+								"leaderboard",
+								"collab",
+								"{{user1Id}}",
+								"items"
+							]
+						},
+						"description": "#### 查詢特定使用者參與任務的次數（曾完成的子任務數量）\n\n- 僅完成了**參與者>1的任務**中之子任務才會被列入計算。"
+					},
+					"response": []
+				},
+				{
+					"name": "Finish User By User Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let user1Id=pm.environment.get(\"user1Id\");",
+									"let jsonData = pm.response.json();",
+									"let todoCount = jsonData.length;",
+									"",
+									"pm.test(`User ID:${user1Id} 曾完成的Todo查詢成功，共完成了${todoCount}個Todo`, function () {",
+									"  pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin1234",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/todos/leaderboard/finish/{{user1Id}}/todos-by-id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"todos",
+								"leaderboard",
+								"finish",
+								"{{user1Id}}",
+								"todos-by-id"
+							]
+						},
+						"description": "#### 查詢特定使用者曾完成過的所有任務。"
+					},
+					"response": []
+				}
+			],
+			"description": "#### 本資料夾提供排行榜之API測試（分為：完成榜、協作榜）。"
+		},
+		{
+			"name": "Delete",
+			"item": [
+				{
+					"name": "Delete Message",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "user",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "user1",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"content\":\"第一則留言\"}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/todos/{{todoId}}/messages/{{secondMessageId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"todos",
+								"{{todoId}}",
+								"messages",
+								"{{secondMessageId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Todo By Id(Admin)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"修復登入 API 錯誤處理\",\n  \"description\": \"部分使用者輸入錯誤密碼時回傳 500，需要調整為 401。\",\n  \"dueDate\": \"2025-09-30\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/todos/{{todoId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"todos",
+								"{{todoId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080/api"
+		}
+	]
+}

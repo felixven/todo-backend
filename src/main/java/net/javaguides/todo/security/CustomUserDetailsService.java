@@ -26,8 +26,6 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(()->new UsernameNotFoundException("User not exists by Username or Email"));
 
 
-        //因為上面的user contain set of role,thus convert the set of role into GrantedAuthority
-
         Set<GrantedAuthority> authorities=user.getRoles().stream()
                 .map((role)->new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toSet());

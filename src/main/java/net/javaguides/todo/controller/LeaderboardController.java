@@ -24,14 +24,6 @@ public class LeaderboardController {
 
     private final TodoItemRepository todoItemRepository;
     private final TodoRepository todoRepository;
-
-    // ========== 協作榜 ==========
-
-    /**
-     * 協作榜：統計使用者完成過的細項數量
-     * Repository → todoItemRepository.collabLeaderboard()
-     * 回傳：List<CollabRowDto>
-     */
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @GetMapping("/collab")
     public ResponseEntity<List<CollabRowDto>> getCollabBoard() {
@@ -39,18 +31,13 @@ public class LeaderboardController {
         List<CollabRowDto> dtoList = rows.stream()
                 .map(r -> new CollabRowDto(
                         (Long) r[0],          // userId
-                        (String) r[1],        // userName（顯示名稱）
-                        (Long) r[2]           // collabCount（細項完成數）
+                        (String) r[1],        // userName
+                        (Long) r[2]           // collabCount（完成數）
                 ))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(dtoList);
     }
 
-    /**
-     * 協作榜明細：查看某使用者完成過哪些細項
-     * Repository → todoItemRepository.collabDetailsForUser(userId)
-     * 回傳：List<CollabItemDetailDto>
-     */
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @GetMapping("/collab/{userId}/items")
     public ResponseEntity<List<CollabItemDetailDto>> getCollabDetails(@PathVariable Long userId) {
@@ -67,13 +54,6 @@ public class LeaderboardController {
         return ResponseEntity.ok(dtoList);
     }
 
-    // ========== 完成者榜（FK-only） ==========
-
-    /**
-     * 完成者榜：統計每個使用者完成的任務數（只計第一完成者）
-     * Repository → todoRepository.finisherLeaderboardByUserId()
-     * 回傳：List<FinisherRowWithIdDto>
-     */
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @GetMapping("/finish-by-id")
     public ResponseEntity<List<FinisherRowWithIdDto>> getFinisherBoardById() {
@@ -81,20 +61,14 @@ public class LeaderboardController {
         List<FinisherRowWithIdDto> out = rows.stream()
                 .map(r -> new FinisherRowWithIdDto(
                         (Long) r[0],                // userId
-                        (String) r[1],              // userName（firstName 或其他顯示名）
+                        (String) r[1],              // userName
                         ((Number) r[2]).longValue() // finishCount（完成任務數）
                 ))
-                // 排序：完成數由大到小
                 .sorted(Comparator.comparingLong(FinisherRowWithIdDto::getFinishCount).reversed())
                 .collect(Collectors.toList());
         return ResponseEntity.ok(out);
     }
 
-    /**
-     * 完成者榜明細：查看某使用者完成過哪些任務
-     * Repository → todoRepository.finisherDetailsByUserId(userId)
-     * 回傳：List<FinisherTodoDetailDto>
-     */
     @PreAuthorize("hasAnyRole('ADMIN','USER')")
     @GetMapping("/finish/{userId}/todos-by-id")
     public ResponseEntity<List<FinisherTodoDetailDto>> getFinisherDetailsByUserId(@PathVariable Long userId) {

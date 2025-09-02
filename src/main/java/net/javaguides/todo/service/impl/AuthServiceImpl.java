@@ -84,8 +84,6 @@ public class AuthServiceImpl implements AuthService {
                 loginDto.getUsernameOrEmail(),
                 loginDto.getUsernameOrEmail()
         );
-
-        // 不管帳號有沒有存在，統一只提示「帳號或密碼錯誤」
         if (userOptional.isEmpty()) {
             throw new TodoAPIException(HttpStatus.UNAUTHORIZED, "帳號或密碼錯誤");
         }
@@ -107,8 +105,6 @@ public class AuthServiceImpl implements AuthService {
 
         JwtAuthResponse jwtAuthResponse = new JwtAuthResponse();
         jwtAuthResponse.setAccessToken(token);
-
-        // ✅ 完整保留你原本的使用者資料設定
         if (userOptional.isPresent()) {
             User loggedInUser = userOptional.get();
             jwtAuthResponse.setUserId(loggedInUser.getId());
@@ -121,77 +117,4 @@ public class AuthServiceImpl implements AuthService {
 
         return jwtAuthResponse;
     }
-
-
-
-//    @Override
-//    public JwtAuthResponse login(LoginDto loginDto) {
-//
-//        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-//                loginDto.getUsernameOrEmail(),
-//                loginDto.getPassword()
-//        ));
-//
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//
-//        String token=jwtTokenProvider.generateToken(authentication);
-//
-//        JwtAuthResponse jwtAuthResponse = new JwtAuthResponse();
-//        jwtAuthResponse.setAccessToken(token);
-//
-//        Optional<User> userOptional=userRepository.findByUsernameOrEmail(loginDto.getUsernameOrEmail(), loginDto.getUsernameOrEmail());
-//
-//        if (userOptional.isPresent()) {
-//            User loggedInUser = userOptional.get();
-//
-//            // 設定名字
-//            jwtAuthResponse.setFirstName(loggedInUser.getFirstName());
-//            jwtAuthResponse.setLastName(loggedInUser.getLastName());
-//
-//            // 設定角色
-//            Optional<Role> optionalRole = loggedInUser.getRoles().stream().findFirst();
-//            optionalRole.ifPresent(role -> jwtAuthResponse.setRole(role.getName()));
-//        }
-//
-//        return jwtAuthResponse;
-//    }
-
-//    @Override
-//    public JwtAuthResponse login(LoginDto loginDto) {
-//
-//        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-//                loginDto.getUsernameOrEmail(),
-//                loginDto.getPassword()
-//        ));
-//
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//
-//        String token=jwtTokenProvider.generateToken(authentication);
-//
-//        Optional<User> userOptional=userRepository.findByUsernameOrEmail(loginDto.getUsernameOrEmail(), loginDto.getUsernameOrEmail());
-//
-//        String role=null;
-//        String firstName = null;
-//        String lastName = null;
-//
-//        if(userOptional.isPresent()){
-//            User loggedInUser=userOptional.get();
-//
-//            firstName = loggedInUser.getFirstName();
-//            lastName = loggedInUser.getLastName();
-//            Optional<Role> optionalRole=loggedInUser.getRoles().stream().findFirst();
-//
-//            if(optionalRole.isPresent()){
-//                Role userRole=optionalRole.get();
-//                role=userRole.getName();
-//            }
-//        }
-//
-//        JwtAuthResponse jwtAuthResponse=new JwtAuthResponse();
-//        jwtAuthResponse.setRole(role);
-//        jwtAuthResponse.setFirstName(firstName);
-//        jwtAuthResponse.setLastName(lastName);
-//        jwtAuthResponse.setAccessToken(token);
-//        return jwtAuthResponse;
-//    }
 }

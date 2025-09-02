@@ -17,7 +17,6 @@ public interface TodoItemRepository extends JpaRepository<TodoItem, Long> {
 
     boolean existsByTodo_IdAndCompletedTrueAndCompletedBy_Username(Long todoId, String username);
 
-    // 判斷某使用者是否曾經完成過這個任務的任一細項
     @Query("SELECT CASE WHEN COUNT(i) > 0 THEN true ELSE false END " +
             "FROM TodoItem i " +
             "WHERE i.todo.id = ?1 AND i.completed = true AND i.completedBy.username = ?2")
@@ -29,7 +28,6 @@ public interface TodoItemRepository extends JpaRepository<TodoItem, Long> {
             "GROUP BY i.completedBy.username")
     List<Object[]> countCompletedItemsByUser(Long todoId);
 
-    // 協作榜：僅計算「有細項且參與者≥2」的任務中的細項完成數，依使用者彙總
     @Query("SELECT i.completedBy.id, i.completedBy.firstName, COUNT(i) " +
             "FROM TodoItem i " +
             "WHERE i.completed = true AND i.completedBy IS NOT NULL " +
@@ -40,7 +38,6 @@ public interface TodoItemRepository extends JpaRepository<TodoItem, Long> {
             "ORDER BY COUNT(i) DESC")
     List<Object[]> collabLeaderboard();
 
-    // 協作榜明細：指定使用者在符合條件任務中完成過的細項清單
     @Query("SELECT i.todo.id, i.todo.title, i.id, i.title, i.completedAt " +
             "FROM TodoItem i " +
             "WHERE i.completed = true " +

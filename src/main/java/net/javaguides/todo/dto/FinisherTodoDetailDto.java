@@ -7,7 +7,6 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-/** 完成者榜明細：某完成者作為「第一完成者」的任務清單 */
 @Getter
 @Setter
 @NoArgsConstructor
