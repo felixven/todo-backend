@@ -4,7 +4,7 @@
 - 本專案為 **任務管理系統（Task Management System）**，由練習基礎語法的 Todo Management System 延伸而來，後續嘗試將工作中接觸到的技術與研究概念融入系統設計，進一步擴充功能與介面。  
 - 系統採用 **前後端分離架構** 開發：前端以 **React.js** 建立使用者介面，後端則以 **Spring Boot + MySQL** 開發 API 服務。  
 - 功能涵蓋任務的新增、編輯、參與、刪除與完成，以及任務資訊與進度的即時呈現。 
-- 本檔案為 **後端原始碼**，前端原始碼請見：[前端原始碼](https://github.com/felixven/todo-frontend.git)
+- 本檔案為 **後端原始碼**，前端原始碼請見：[Task Management System |前端原始碼](https://github.com/felixven/todo-frontend.git)
 
 # 功能介紹
 - 使用者管理：註冊 / 登入 / JWT Token 驗證，支援角色權限分流。
